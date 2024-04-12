@@ -1,0 +1,46 @@
+﻿services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: football
+      POSTGRES_PASSWORD: football
+      POSTGRES_DB: football
+    ports:
+      - "5432:5432"
+    networks:
+      - ead-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U football" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+  
+  ead-csharp-cp2:
+    image: ead-csharp-cp2
+    build:
+      context: .
+      dockerfile: ead-csharp-cp2/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+      - "8443:443"
+    networks:
+      - ead-network
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: football
+      DB_USER: football
+      DB_PASS: football
+      ASPNETCORE_ENVIRONMENT: Development
+
+networks:
+  ead-network:
+
+volumes:
+  db-data:

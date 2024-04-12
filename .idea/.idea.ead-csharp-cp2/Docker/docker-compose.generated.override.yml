@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  ead-csharp-cp2:
+    build:
+      context: "/home/kaikwb/work/ead-csharp-cp2"
+      dockerfile: "ead-csharp-cp2/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/ead-csharp-cp2.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "ead-csharp-cp2:dev"
+    ports: []
+    volumes:
+    - "/home/kaikwb/.nuget/packages:/root/.nuget/packages"
+    - "/home/kaikwb/work/ead-csharp-cp2/ead-csharp-cp2:/app:rw"
+    - "/home/kaikwb/work/ead-csharp-cp2:/src:rw"
+    working_dir: "/app"
